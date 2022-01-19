@@ -6,9 +6,8 @@ from autopass import secrets
 
 def main():
     html = extractCalendar()
-    xpath = readCalendar(html, 15)
-    print(xpath)
-    submitInformation(xpath)
+    readCalendar(html, 15)
+    submitInformation(datexpath)
 # Load webpage and extract the
 
 
@@ -20,7 +19,7 @@ def extractCalendar():
     driver.find_element_by_xpath(calendarOpenButton).click()
     html = driver.page_source
     return html
-# Read in calendar to find the date you want to return the xpath for that day
+# Read in calendar to find the date you want and select
 
 
 def readCalendar(html, date):
@@ -39,26 +38,38 @@ def readCalendar(html, date):
             if curr:
                 counter += 1
                 if counter == date:
-                   return f'//*[@id="equip_"]/div[6]/div[1]/table/tbody/tr[{trCount}]/td[{tdCount}]'
+                   datexpath = f'//*[@id="equip_"]/div[6]/div[1]/table/tbody/tr[{trCount}]/td[{tdCount}]'
+                   driver.find_element_by_xpath(datexpath).click()
             if currentDay == td.contents[0]:
                 curr = True
                 counter = 1
-def submitInformation():
-    
-    
-    
-    firstName = secrets.FNAME()
-    lastName = secrets.LNAME()
-    email = secrets.EMAIL()
-    uid = secrets.UID()
+# Click on date
+def selectTime(html,time):
+    pass
 
+
+def submitInformation(datexpath):
     dateSubmitButton = '//*[@id="submit_times"]'
+    driver.find_element_by_xpath(dateSubmitButton).click()
     continueButton = '//*[@id="terms_accept"]'
+    driver.find_element_by_xpath(continueButton).click()
     firstNameInput = '//*[@id="fname"]'
+    firstName = secrets.FNAME()
+    driver.find_element_by_xpath(firstNameInput).send_keys(firstName)
     lastNameInput = '//*[@id="lname"]'
+    lastName = secrets.LNAME()
+    driver.find_element_by_xpath(firstNameInput).send_keys(lastName)
     emailInput = '//*[@id="email"]'
+    email = secrets.EMAIL()
+    driver.find_element_by_xpath(firstNameInput).send_keys(email)
+    uid = secrets.UID()
     UIDInput = '//*[@id="q16114"]'
+    driver.find_element_by_xpath(firstNameInput).send_keys(uid)
     submitBookingButton = '//*[@id="btn-form-submit"]'
+    driver.find_element_by_xpath(submitBookingButton).click()
+
+    
+    
 
 
 
