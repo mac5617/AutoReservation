@@ -1,6 +1,4 @@
 from bs4 import BeautifulSoup
-import requests
-from lxml import etree
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from autopass import secrets
@@ -8,7 +6,9 @@ from autopass import secrets
 
 def main():
     html = extractCalendar()
-    readCalendar(html, 15)
+    xpath = readCalendar(html, 15)
+    print(xpath)
+    submitInformation(xpath)
 # Load webpage and extract the
 
 
@@ -29,18 +29,37 @@ def readCalendar(html, date):
     curr = False
     counter = 0
     dateResult = 0
+    tdCount = 0
+    trCount = 0
     calTable = soup.find_all('table', {'class': 'table-condensed'})[0]
     for tr in calTable.find_all('tr'):
+        trCount+=1
         for td in tr.find_all('td'):
+            tdCount+=1
             if curr:
                 counter += 1
-                if counter == 15:
-                   dateResult = td.contents[0]
+                if counter == date:
+                   return f'//*[@id="equip_"]/div[6]/div[1]/table/tbody/tr[{trCount}]/td[{tdCount}]'
             if currentDay == td.contents[0]:
                 curr = True
                 counter = 1
-            if dateResult > 0:
-                pass
+def submitInformation():
+    
+    
+    
+    firstName = secrets.FNAME()
+    lastName = secrets.LNAME()
+    email = secrets.EMAIL()
+    uid = secrets.UID()
+
+    dateSubmitButton = '//*[@id="submit_times"]'
+    continueButton = '//*[@id="terms_accept"]'
+    firstNameInput = '//*[@id="fname"]'
+    lastNameInput = '//*[@id="lname"]'
+    emailInput = '//*[@id="email"]'
+    UIDInput = '//*[@id="q16114"]'
+    submitBookingButton = '//*[@id="btn-form-submit"]'
+
 
 
 #steps
@@ -53,4 +72,4 @@ def readCalendar(html, date):
 #fill out personal information
 #submit booking
 if __name__ == "__main__":
-    my_function()
+    main()
