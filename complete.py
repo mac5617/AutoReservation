@@ -8,7 +8,7 @@ def main():
     html = extractCalendar()
     readCalendar(html, 15)
     submitInformation(datexpath)
-# Load webpage and extract the
+# Load webpage and extract the calendar
 
 
 def extractCalendar():
@@ -19,7 +19,7 @@ def extractCalendar():
     driver.find_element_by_xpath(calendarOpenButton).click()
     html = driver.page_source
     return html
-# Read in calendar to find the date you want and select
+# Read in calendar to find the date you want and select choose a date
 
 
 def readCalendar(html, date):
@@ -43,9 +43,32 @@ def readCalendar(html, date):
             if currentDay == td.contents[0]:
                 curr = True
                 counter = 1
-# Click on date
-def selectTime(html,time):
-    pass
+# Read in time
+
+#time 24 hour format
+def selectTime(html, room, time):
+    roomdict = {
+        '6223':0,
+        '6225':1,
+        '6227':2,
+        '6229':3,
+        '6231':4,
+        '6235':5,
+        '6257':7,
+        '6239':8,
+        '6241':9,
+        '6243':10,
+        '6245':11,
+    }
+    soup = BeautifulSoup(html, 'html.parser')
+    table = soup.find('table',{'class':'fc-scrollgrid-sync-table table-bordered'})
+    hour = time.spit(':')[0]*2
+    minute = time.spit(':')[1]
+    if minute == '30':
+        hour+=1
+    timexpath = f'//*[@id="eq-time-grid"]/div[2]/div/table/tbody/tr/td[3]/div/div/div/table/tbody/tr[{roomdict.get(room)}]/td/div/div[2]/div[{hour}]'
+    driver.find_element_by_xpath(timexpath).click
+#Click on confirmation button
 
 
 def submitInformation(datexpath):
