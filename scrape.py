@@ -10,7 +10,8 @@ from autopass import secrets
 def main():
     driver = webdriver.Chrome()
     Calendar(driver, day=15)
-    selectTime(driver,room='6239',time='9:30')
+    selectTime(driver,room='6231',time='11:00')
+    submitInformation(driver)
 def Calendar(driver,day:int):
     """
         Method loads the calendar then clicks on the day that you have given.
@@ -61,17 +62,20 @@ def selectTime(driver,room:str,time:str):
     driver.find_element(By.XPATH,timePath).click()
     driver.implicitly_wait(100)
     driver.find_element(By.XPATH,'//*[@id="submit_times"]').click()
+    driver.implicitly_wait(100)
+    WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[4]/main/div/div/div/div[8]/div[2]/form/div[2]/button')))
+    driver.find_element(By.XPATH,'/html/body/div[4]/main/div/div/div/div[8]/div[2]/form/div[2]/button').click()
 
 def submitInformation(driver):
     """
         Method takes information from secret and submit the information
         Secret is just a dictionary in another file
     """
-    driver.find_element_by_xpath('//*[@id="fname"]').send_keys(secrets.get('FNAME'))
-    driver.find_element_by_xpath('//*[@id="lname"]').send_keys(secrets.get('LNAME'))
-    driver.find_element_by_xpath('//*[@id="email"]').send_keys(secrets.get('EMAIL'))
-    driver.find_element_by_xpath('//*[@id="q16114"]').send_keys(secrets.get('UID'))
-    driver.find_element_by_xpath('//*[@id="btn-form-submit"]').click()
-
+    driver.find_element(By.XPATH,'//*[@id="fname"]').send_keys(secrets.get('FNAME'))
+    driver.find_element(By.XPATH,'//*[@id="lname"]').send_keys(secrets.get('LNAME'))
+    driver.find_element(By.XPATH,'//*[@id="email"]').send_keys(secrets.get('EMAIL'))
+    driver.find_element(By.XPATH,'//*[@id="q16114"]').send_keys(secrets.get('UID'))
+    driver.find_element(By.XPATH,'//*[@id="btn-form-submit"]').click()
+  
 if __name__ == "__main__":
     main()
